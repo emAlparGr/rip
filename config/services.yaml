@@ -11,6 +11,32 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
+    App\Command\SeeCommand:
+        arguments:
+            $quoteRepository: '@App\Repository\QuoteRepository'
+            $entityManager: '@doctrine.orm.entity_manager'
+
+    App\Command\CreateIdCommand:
+        arguments:
+            $entityManager: '@doctrine.orm.entity_manager'
+
+    App\Command\DelidCommand:
+        arguments:
+            $entityManager: '@doctrine.orm.entity_manager'
+
+    App\Command\ChangeIdCommand:
+        arguments:
+            $entityManager: '@doctrine.orm.entity_manager'
+
+    App\Chat:
+        arguments: []
+
+    App\Command\ChatCommand:
+        arguments:
+            $chat: '@App\Chat'
+        tags:
+            - { name: 'console.command' } 
+
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:

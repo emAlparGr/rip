@@ -28,6 +28,7 @@ class QuotesController extends AbstractController
             'path' => 'src/Controller/QuotesController.php',
         ]);
     }
+    
     #[Route('/qget', name: 'get_quotes', methods: 'get')]
     public function get_quotes(QuoteRepository $repository): JsonResponse
     {
