@@ -40,6 +40,18 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
+    public function getAllValuesOfColumn($columnName)
+    {
+        $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQuery(
+            "SELECT e.{$columnName} FROM App\Entity\Entity e"
+        );
+        $result = $query->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        // Преобразование результатов в простой массив
+        $values = array_column($result, $columnName);
+        return $values;
+    }
+
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */
