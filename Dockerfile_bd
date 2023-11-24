@@ -1,0 +1,7 @@
+# Используем официальный образ PostgreSQL
+FROM postgres:15-alpine
+
+# Пример установки параметров базы данных в Dockerfile
+ENV POSTGRES_DB=lab1
+ENV POSTGRES_USER=al
+ENV POSTGRES_PASSWORD=123

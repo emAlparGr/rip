@@ -1,0 +1,8 @@
+# Используем официальный образ NGINX
+FROM nginx:latest
+
+# Копируем конфигурационные файлы NGINX из локального проекта
+COPY /home/al/education/rip/nginx.conf /etc/nginx/nginx.conf
+
+# Копируем файлы для веб-сервера из локального проекта
+COPY /home/al/education/rip/html/ /usr/share/nginx/html/
