@@ -15,7 +15,8 @@ security:
             security: false
         main:
             lazy: true
-            provider: app_user_provider
+            json_login:
+                chech_path: login
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall

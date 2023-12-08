@@ -11,6 +11,60 @@ use Symfony\Component\HttpFoundation\Request;
 class AuthController extends AbstractController
 {
     #[Route('/', name: 'app_auth')]
+
+    #[Route('/login', name: 'login', methods: 'post')]
+    public function login(): JsonResponse
+    {
+        $user = $this->getUser();
+        if ($user instanceof User) {
+            return $this->json([
+                'code' => Response::HTTP_OK,
+                'message' => 'See PHPSESSID in cookie',
+                'name' => $user->getName(),
+            ], Response::HTTP_OK);
+        };
+
+        return $this->json([
+            'code' => Response::HTTP_UNAUTHORITHED,
+            'message' => 'missing credentials',
+        ], Response::HTTP_UNAUTHORITHED);
+    }
+
+    #[Route('/info')]
+    public function getInfo(): Response
+    {
+        if ($this->getUser() != null) {
+            return $this->json([
+                'code' => Response::HTTP_OK,
+                'isGranted' => true,
+            ]);
+        }
+
+        return $this->json([
+            'code' => Response::HTTP_OK,
+            'message' => 'AuthController user not found',
+        ]);
+    }
+
+    #[Route('/registration', name: 'apiRegistration', methods: 'post')]
+    public function registration(Request $request, UserPasswordHasherInterface $hasher, ManagerRegistry $registry): Response
+    {
+        $content = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        //dd($content);
+
+        $user = new User();
+        $user->setName($content['name']);
+        $user->setPassword($haser->hashPassword($user, $content['password']));
+        $user->setEmail($content['email']);
+        
+        $em = $registry->getManager('users');
+        $em->persist($user);
+        $em->flash();
+        return $this->json([
+            'code' => Response::HTTP_OK,
+        ]);
+    }
+
     public function index(): JsonResponse
     {
         return $this->json([
@@ -18,7 +72,7 @@ class AuthController extends AbstractController
             'path' => 'src/Controller/AuthController.php',
         ]);
     }
-
+    
     #[Route('/signup', name: 'signup', methods: 'post')]
     public function signUp(Request $request, UserRepository $repository): JsonResponse
     {
@@ -42,17 +96,6 @@ class AuthController extends AbstractController
         return new JsonResponse(['message' => 'Вы успешно зарегистрировались'], 201);
     }
 
-    #[Route('/login', name: 'login', methods: 'post')]
-    public function logIn(): JsonResponse
-    {
-        // Ваш код для аутентификации пользователя и возврата токена или иного идентификатора сессии
-        // ...
-
-        return $this->json([
-            'message' => 'Добро пожаловать!',
-            // Другие данные, которые вы хотите вернуть, например, токен
-        ]);
-    }
 
     #[Route('/logout', name: 'logout', methods: 'delete')]
     public function logOut(): JsonResponse
