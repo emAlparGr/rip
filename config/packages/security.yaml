@@ -57,4 +57,5 @@ security:
                 - App\Security\ApiKeyAuthenticator
     access_control:
         - { path: ^/auth, roles: [] }
+        - { path: ^/api/quotes/qget, roles: [] }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
