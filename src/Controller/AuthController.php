@@ -96,4 +96,18 @@ class AuthController extends AbstractController
 
         return $response;
     }
+
+    #[Route('/api/info', name: 'api_info', methods: ['GET'])]
+    public function info(Request $request, UserRepository $repository): JsonResponse
+    {
+        $token = $request->headers->get('LAB-TOKEN');
+        $user = $repository->findOneBy(['apiToken' => $token]);
+        return new JsonResponse([
+            'name' => $user->getName(),
+            'roles' => $user->getRoles(),
+            'email' => $user->getEmail()
+        ],
+            JsonResponse::HTTP_OK
+        );
+    }
 }
