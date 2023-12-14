@@ -53,7 +53,7 @@ class AuthController extends AbstractController
 
         $response = new JsonResponse(['success' => 'Новый пользователь зарегистрирован'], JsonResponse::HTTP_CREATED);
         $response->headers->set('LAB-TOKEN', $token);
-        $response->headers->setCookie(Cookie::create('session', $token));
+        $response->headers->setCookie(Cookie::create('LAB-TOKEN', $token, 0, '/', 'localhost', null, false));
 
         return $response;
     }
@@ -92,7 +92,7 @@ class AuthController extends AbstractController
 
         $response = new JsonResponse(['success' => 'Вход выполнен'], JsonResponse::HTTP_CREATED);
         $response->headers->set('LAB-TOKEN', $token);
-        $response->headers->setCookie(Cookie::create('session', $token));
+        $response->headers->setCookie(Cookie::create('LAB-TOKEN', $token, 0, '/', 'localhost', null, false));
 
         return $response;
     }
