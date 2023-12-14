@@ -56,6 +56,6 @@ security:
             custom_authenticators:
                 - App\Security\ApiKeyAuthenticator
     access_control:
-        - { path: ^/auth, roles: [] }
-        - { path: ^/api/quotes/qget, roles: [] }
+        - { path: ^/auth, roles: PUBLIC_ACCESS }
+        - { path: ^/api/quotes/qget, roles: PUBLIC_ACCESS }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
