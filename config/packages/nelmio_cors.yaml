@@ -1,6 +1,6 @@
 nelmio_cors:
     defaults:
-        allow_credentials: false
+        allow_credentials: true
         allow_origin: []
         allow_headers: []
         allow_methods: []
@@ -11,15 +11,10 @@ nelmio_cors:
         forced_allow_origin_value: ~
         skip_same_as_origin: true
     paths:
-        '^/api/*':
-            allow_origin: ['*']
-            allow_headers: ['LAB-TOKEN']
-            allow_methods: ['POST', 'PUT', 'GET', 'DELETE']
-            max_age: 3600
         '^/':
             origin_regex: true
+            allow_credentials: true
             allow_origin: ['^http://localhost:[0-9]+']
-            allow_headers: ['LAB-TOKEN']
+            allow_headers: ['*']
             allow_methods: ['POST', 'PUT', 'GET', 'DELETE']
             max_age: 3600
-            hosts: ['^api\.']
