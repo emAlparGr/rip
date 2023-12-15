@@ -41,7 +41,7 @@ services:
     image: postgres:alpine
     restart: always
     env_file:
-      - .env
+      - .env.docker
     ports:
       - 5433:5432
     environment:
