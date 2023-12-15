@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -32,6 +34,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'string', unique: true, nullable: true)]
     private $apiToken;
+
+    #[ORM\OneToMany(mappedBy:'user', targetEntity: Quote::class)]
+    private $quotes;
 
     public function getId(): ?int
     {
@@ -115,5 +120,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
         // $this->plainPassword = null;
+    }
+
+    public function getQuotes(): Collection
+    {
+        return $this->quotes;
     }
 }

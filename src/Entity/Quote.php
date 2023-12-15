@@ -16,6 +16,9 @@ class Quote
     #[ORM\Column(length: 255)]
     private ?string $author = null;
 
+    #[ORM\ManyToOne(inversedBy: 'user', targetEntity: User::class)]
+    private $user;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -29,6 +32,18 @@ class Quote
     public function setAuthor(string $author): static
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
