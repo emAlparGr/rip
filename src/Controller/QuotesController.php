@@ -9,6 +9,7 @@ use App\Repository\QuoteRepository;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Quote;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\UserRepository;
 
 #[Route('/api/quotes')]
 
@@ -23,7 +24,7 @@ class QuotesController extends AbstractController
     #[Route('/', name: 'app_quotes')]
     public function index(): JsonResponse
     {
-        return $this->json([
+        return new JsonResponse([
             'message' => 'Welcome to your new controller!',
             'path' => 'src/Controller/QuotesController.php',
         ]);
@@ -33,20 +34,33 @@ class QuotesController extends AbstractController
     public function get_quotes(QuoteRepository $repository): JsonResponse
     {
         $list = $repository->findAll();
-        return $this->json([
-            'quotes' => $list
+        $arr = (array) $list;
+        foreach ($list as $key => $value) {
+            $arr[$key] = [
+                'id' => $value->getId(),
+                'author' => $value->getAuthor(),
+            ];
+        }
+        return new JsonResponse([
+            'quotes' => $arr
         ]);
     }
 
     #[Route('/qpost', name: 'create_author', methods: 'post')]
-    public function createAuthor(Request $request, QuoteRepository $repository): JsonResponse
+    public function createAuthor(Request $request, QuoteRepository $repository, UserRepository $userRepository): JsonResponse
     {
         $quotes = new Quote();
         $quotes->setAuthor($request->request->get('author'));
+        $token = $request->headers->get('LAB-TOKEN');
+        $user = $userRepository->findOneBy(['apiToken' => $token]);
+        $quotes->setUser($user);
         $this->entityManager->persist($quotes);
         $this->entityManager->flush();
-        return $this->json([
-            "author" => $quotes
+        return new JsonResponse([
+            "author" => [
+                'id' => $quotes->getId(),
+                'author' => $quotes->getAuthor(),
+            ]
         ]);
     }
 
@@ -60,8 +74,11 @@ class QuotesController extends AbstractController
         $quotes->setAuthor($data['author']);
 
         $this->entityManager->flush();
-        return $this->json([
-            "author" => $quotes
+        return new JsonResponse([
+            "author" => [
+                'id' => $quotes->getId(),
+                'author' => $quotes->getAuthor(),
+            ]
         ]);
     }
 
@@ -71,8 +88,11 @@ class QuotesController extends AbstractController
         $quotes = $repository->find($id);
         $this->entityManager->remove($quotes);
         $this->entityManager->flush();
-        return $this->json([
-            "author" => $quotes
+        return new JsonResponse([
+            "author" => [
+                'id' => $quotes->getId(),
+                'author' => $quotes->getAuthor(),
+            ]
         ]);
     }
 }
