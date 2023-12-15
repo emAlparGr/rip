@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Quote;
 use Doctrine\ORM\EntityManagerInterface;
 
-    #[Route('/api/quotes')]
+#[Route('/api/quotes')]
 
 class QuotesController extends AbstractController
 {
@@ -28,7 +28,7 @@ class QuotesController extends AbstractController
             'path' => 'src/Controller/QuotesController.php',
         ]);
     }
-    
+
     #[Route('/qget', name: 'get_quotes', methods: 'get')]
     public function get_quotes(QuoteRepository $repository): JsonResponse
     {
@@ -37,14 +37,14 @@ class QuotesController extends AbstractController
             'quotes' => $list
         ]);
     }
-    
+
     #[Route('/qpost', name: 'create_author', methods: 'post')]
     public function createAuthor(Request $request, QuoteRepository $repository): JsonResponse
-    {   
+    {
         $quotes = new Quote();
-        $quotes -> setAuthor($request -> request -> get('author'));
-        $this->entityManager -> persist($quotes);
-        $this->entityManager -> flush();
+        $quotes->setAuthor($request->request->get('author'));
+        $this->entityManager->persist($quotes);
+        $this->entityManager->flush();
         return $this->json([
             "author" => $quotes
         ]);
@@ -52,25 +52,25 @@ class QuotesController extends AbstractController
 
 
     #[Route('/qput/{id}', name: 'put_author', methods: 'put')]
-    public function putAuthor($id,Request $request, QuoteRepository $repository): JsonResponse
-    {   
-        $quotes = $repository -> find($id);
+    public function putAuthor($id, Request $request, QuoteRepository $repository): JsonResponse
+    {
+        $quotes = $repository->find($id);
 
         $data = json_decode($request->getContent(), true);
-        $quotes -> setAuthor($data['author']);
+        $quotes->setAuthor($data['author']);
 
-        $this->entityManager -> flush();
+        $this->entityManager->flush();
         return $this->json([
             "author" => $quotes
         ]);
     }
 
     #[Route('/{id}', name: 'delete_author', methods: 'delete')]
-    public function deleteAuthor($id,Request $request, QuoteRepository $repository): JsonResponse
-    {   
-        $quotes = $repository -> find($id);
-        $this->entityManager -> remove($quotes);
-        $this->entityManager -> flush();
+    public function deleteAuthor($id, Request $request, QuoteRepository $repository): JsonResponse
+    {
+        $quotes = $repository->find($id);
+        $this->entityManager->remove($quotes);
+        $this->entityManager->flush();
         return $this->json([
             "author" => $quotes
         ]);
